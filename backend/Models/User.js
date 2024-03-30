@@ -1,4 +1,5 @@
 const mongoose=require('mongoose')
+const Joi=require('joi')
 
 const UserSchema=new mongoose.Schema({
     username:{
@@ -8,6 +9,14 @@ const UserSchema=new mongoose.Schema({
         minlength:2,
         maxlength:100,
         unique:true
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 5,
+        maxlength: 100,
+        unique: true,
     },
     password:{
         type:String,
@@ -36,6 +45,17 @@ const UserSchema=new mongoose.Schema({
     timestamps:true
 })
 
+// User model
 const User=mongoose.model('User',UserSchema)
 
-module.exports={User}
+// Validate register user
+function validateRegisterUser(obj){
+    const schema=Joi.object({
+        username:Joi.string().trim().min(2).max(100).required(),
+        email:Joi.string().trim().min(5).max(100).required(),
+        password:Joi.string().trim().min(8).required(),
+    })
+    return schema.validate(obj)
+}
+
+module.exports={User,validateRegisterUser}
