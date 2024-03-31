@@ -60,7 +60,7 @@ module.exports.loginUserCtrl=asyncHandler(async (req,res)=>{
     }
 
     // Check password
-    const isPasswordMatch=bcrypt.compare(req.body.password)
+    const isPasswordMatch = await bcrypt.compare(req.body.password, user.password);
     if(!isPasswordMatch){
         res.status(400).json({message:"Invalid email or password"})
     }
