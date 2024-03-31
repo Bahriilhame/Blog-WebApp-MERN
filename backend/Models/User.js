@@ -42,8 +42,9 @@ const UserSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    timestamps:true
-})
+},
+    {timestamps:true}
+)
 
 // User model
 const User=mongoose.model('User',UserSchema)
