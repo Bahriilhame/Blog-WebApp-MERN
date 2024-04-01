@@ -13,6 +13,7 @@ app.use(express.json())
 
 // Routes
 app.use('/api/auth',require('./router/authRoute'))
+app.use('/api/users',require('./router/usersRoute'))
 
 // Running server
 const PORT=process.env.PORT || 8000
