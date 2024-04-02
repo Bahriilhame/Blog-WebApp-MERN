@@ -14,4 +14,4 @@ const getAllUsers = asyncHandler(async(req,res)=>{
     res.status(200).json(users)
 })
 
-module.exports=getAllUsers
+module.exports={getAllUsers}
