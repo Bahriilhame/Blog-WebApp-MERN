@@ -10,7 +10,7 @@ const { ObjectId } = require('mongoose').Types;
  * ------------------------------------------*/
 
 const getAllUsersCtrl = asyncHandler(async(req,res)=>{
-    const users=await User.find()
+    const users=await User.find().select('-password')
     res.status(200).json(users)
 })
 
@@ -22,8 +22,7 @@ const getAllUsersCtrl = asyncHandler(async(req,res)=>{
  * ------------------------------------------*/
 
 const getUserProfileCtrl=asyncHandler(async(req,res)=>{
-    // const user=await User.findOne({_id:req.params.id})
-    const user = await User.findOne({ _id:new ObjectId(req.params.id) });
+    const user = await User.findOne({ _id:new ObjectId(req.params.id)}).select('-password');
     if(!user){
         return res.status(404).json({message:'User not found'})
     }
