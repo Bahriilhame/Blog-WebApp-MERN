@@ -29,4 +29,18 @@ function verifyTokenAndAdmin(req,res,next){
     })
 }
 
-module.exports={verifyTokenAndAdmin}
+// verify Token & user
+function verifyTokenAndUser(req,res,next){
+    verifyToken(req,res,()=>{
+        console.log("req.user.id :" , req.user.id);
+        console.log("req.params.id :" , req.params.id);
+        if(req.user.id ===req.params.id){
+            next()
+        }
+        else{
+            return res.status(403).json({message:"Not Allowed"})
+        }
+    })
+}
+
+module.exports={verifyTokenAndAdmin,verifyTokenAndUser}
