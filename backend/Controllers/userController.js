@@ -66,6 +66,17 @@ const updateUserProfileCtrl=asyncHandler(async(req,res)=>{
     res.status(200).json(userUpdated)
 })
 
+/**--------------------------------------------
+ * @desc   Get users count
+ * @route /api/users/count
+ * @method Get
+ * @access private (only admin)  
+ * ------------------------------------------*/
 
-module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl}
+const getUsersCountCtrl=asyncHandler(async (req,res)=>{
+    const usersCount=await User.find().countDocuments()
+    res.status(200).json(usersCount)
+})
+
+module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl}
 
