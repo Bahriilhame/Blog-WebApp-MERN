@@ -43,4 +43,4 @@ function verifyTokenAndUser(req,res,next){
     })
 }
 
-module.exports={verifyTokenAndAdmin,verifyTokenAndUser}
+module.exports={verifyTokenAndAdmin,verifyTokenAndUser,verifyToken}

@@ -78,5 +78,19 @@ const getUsersCountCtrl=asyncHandler(async (req,res)=>{
     res.status(200).json(usersCount)
 })
 
-module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl}
+/**--------------------------------------------
+ * @desc   Profile photo upload
+ * @route /api/users/profile/profile-photo-upload
+ * @method POST
+ * @access private (only logged in users)   
+ * ------------------------------------------*/
+
+const profilePhotoUploadCtrl=asyncHandler(async (req,res)=>{
+    if(!req.file){
+        return res.status(400).json({message: 'No file uploaded'})
+    }
+    res.status(200).json({message: 'photo Uploaded successfully'});
+})
+
+module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl,profilePhotoUploadCtrl}
 
