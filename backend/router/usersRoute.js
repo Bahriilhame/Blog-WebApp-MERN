@@ -1,21 +1,29 @@
 const router=require('express').Router()
-const {getAllUsersCtrl , getUserProfileCtrl, updateUserProfileCtrl, getUsersCountCtrl, profilePhotoUploadCtrl} = require('../Controllers/userController')
-const { verifyTokenAndAdmin, verifyTokenAndUser, verifyToken } = require('../middlewares/verifyToken')
+const {getAllUsersCtrl , getUserProfileCtrl, updateUserProfileCtrl, getUsersCountCtrl, profilePhotoUploadCtrl, deleteUserProfileCtrl} = require('../Controllers/userController')
+const { verifyTokenAndAdmin, verifyTokenAndUser, verifyToken, verifyTokenAndAuthorization } = require('../middlewares/verifyToken')
 const validateObjectId = require('../middlewares/validateObjectId')
 const photoUpload = require('../middlewares/photoUpload')
 
 // /api/users/profile 
-router.route('/profile').get(verifyTokenAndAdmin,getAllUsersCtrl)
+router
+    .route('/profile')
+    .get(verifyTokenAndAdmin,getAllUsersCtrl)
 
 // /api/users/profile/:id
-router.route('/profile/:id')
+router
+    .route('/profile/:id')
     .get(validateObjectId,getUserProfileCtrl)
     .put(validateObjectId,verifyTokenAndUser,updateUserProfileCtrl)
+    .delete(validateObjectId,verifyTokenAndAuthorization,deleteUserProfileCtrl)
 
 // /api/users/profile/profile-photo-upload
-router.route('/profile/profile-photo-upload').post(verifyToken,photoUpload.single("image"),profilePhotoUploadCtrl)
+router
+    .route('/profile/profile-photo-upload')
+    .post(verifyToken,photoUpload.single("image"),profilePhotoUploadCtrl)
 
 // /api/users/count
-router.route('/count').get(verifyTokenAndAdmin,getUsersCountCtrl)
+router
+    .route('/count')
+    .get(verifyTokenAndAdmin,getUsersCountCtrl)
 
 module.exports=router

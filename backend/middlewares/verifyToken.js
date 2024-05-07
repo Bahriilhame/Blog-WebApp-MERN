@@ -43,4 +43,16 @@ function verifyTokenAndUser(req,res,next){
     })
 }
 
-module.exports={verifyTokenAndAdmin,verifyTokenAndUser,verifyToken}
+// verify Token & Authorization
+function verifyTokenAndAuthorization(req,res,next){
+    verifyToken(req,res,()=>{
+        if(req.user.id ===req.params.id || req.user.isAdmin){
+            next()
+        }
+        else{
+            return res.status(403).json({message:"Not Allowed, only user or administrator is allowed"})
+        }
+    })
+}
+
+module.exports={verifyTokenAndAdmin,verifyTokenAndUser,verifyToken, verifyTokenAndAuthorization}

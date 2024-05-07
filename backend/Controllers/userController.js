@@ -5,6 +5,7 @@ const bcrypt=require('bcryptjs')
 const path=require('path')  
 const fs=require('fs')
 const {cloudinaryRemoveImage,cloudinaryUploadImage}=require('../Utils/Cloudinary')
+
 /**--------------------------------------------
  * @desc   Get All users profile
  * @route /api/users/profile
@@ -126,5 +127,38 @@ const profilePhotoUploadCtrl=asyncHandler(async (req,res)=>{
     fs.unlinkSync(imagePath)
 })
 
-module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl,profilePhotoUploadCtrl}
+/**--------------------------------------------
+ * @desc   Delete user profile (Account)
+ * @route /api/users/profile/:id
+ * @method DELETE
+ * @access private (only admin OR user himself)   
+ * ------------------------------------------*/
+
+const deleteUserProfileCtrl=asyncHandler(async (req,res)=>{
+    // Get the user from the DB
+    const user=await User.findById(req.params.id)
+    if(!user){
+        return res.status(404).json({message:"User not found"});
+    }
+
+    // Get all the posts from DB
+
+    // Get the public ids from the posts
+    
+    // Delete all posts images from the cloudinary that belong to this user
+
+    // Delete the profile picture from the cloudinary
+    await cloudinaryRemoveImage(user.profilePhoto.publicId)
+
+    // Delete user posts & comments
+    
+    // Delete the user from the DB
+    await User.findByIdAndDelete(req.params.id)
+
+    // Send response to the client
+    res.status(200).json({message:"Profile deleted successfully"})
+
+})
+
+module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl,profilePhotoUploadCtrl, deleteUserProfileCtrl}
 
