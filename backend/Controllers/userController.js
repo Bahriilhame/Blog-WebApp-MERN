@@ -2,6 +2,7 @@ const asyncHandler=require('express-async-handler')
 const { User, validateUpdateUser } = require('../Models/User')
 const { ObjectId } = require('mongoose').Types;
 const bcrypt=require('bcryptjs')
+const path=require('path')  
 
 /**--------------------------------------------
  * @desc   Get All users profile
@@ -86,10 +87,22 @@ const getUsersCountCtrl=asyncHandler(async (req,res)=>{
  * ------------------------------------------*/
 
 const profilePhotoUploadCtrl=asyncHandler(async (req,res)=>{
+    // Validation
     if(!req.file){
         return res.status(400).json({message: 'No file uploaded'})
     }
+
+    // Get the path to the photo
+    const imagePath=path.join(__dirname,`../images/${req.file.filename}`)
+    // Upload the photo to the cloudinary
+    // Get the user from DB
+    // Delete the old profile phot if exists    
+    // Change the profile photo field in the DB
+
+    // Send response to the client
     res.status(200).json({message: 'photo Uploaded successfully'});
+
+    // Remove the photo from the server 
 })
 
 module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl,profilePhotoUploadCtrl}
