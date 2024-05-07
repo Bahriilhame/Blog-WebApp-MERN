@@ -3,7 +3,8 @@ const { User, validateUpdateUser } = require('../Models/User')
 const { ObjectId } = require('mongoose').Types;
 const bcrypt=require('bcryptjs')
 const path=require('path')  
-
+const fs=require('fs')
+const {cloudinaryRemoveImage,cloudinaryUploadImage}=require('../Utils/Cloudinary')
 /**--------------------------------------------
  * @desc   Get All users profile
  * @route /api/users/profile
@@ -94,15 +95,35 @@ const profilePhotoUploadCtrl=asyncHandler(async (req,res)=>{
 
     // Get the path to the photo
     const imagePath=path.join(__dirname,`../images/${req.file.filename}`)
+
     // Upload the photo to the cloudinary
+    const result=await cloudinaryUploadImage(imagePath)
+
     // Get the user from DB
+    const user=await User.findById(req.user.id)
+
     // Delete the old profile phot if exists    
+    if(user.profilePhoto.publicId!==null){
+        await cloudinaryRemoveImage(user.profilePhoto.publicId);
+    }
+
     // Change the profile photo field in the DB
+    user.profilePhoto={
+        url:result.secure_url,
+        publicId:result.public_id
+    }
+    await user.save();
 
     // Send response to the client
-    res.status(200).json({message: 'photo Uploaded successfully'});
+    res.status(200).json({message: 'photo Uploaded successfully',
+        profilePhoto:{
+            url:user.profilePhoto.url,
+            publicId:user.profilePhoto.publicId
+        }
+    });
 
     // Remove the photo from the server 
+    fs.unlinkSync(imagePath)
 })
 
 module.exports={getAllUsersCtrl,getUserProfileCtrl,updateUserProfileCtrl,getUsersCountCtrl,profilePhotoUploadCtrl}
